@@ -53,6 +53,8 @@ function AddPostPage({ addNewPost }) {
       text,
       image,
       link,
+      likes: 0,
+      liked: false,
     };
 
     addNewPost(newPost);

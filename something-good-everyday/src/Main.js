@@ -1,11 +1,24 @@
 import logo from "./logo.png";
+import likeImage from "./not-liked.svg";
+import likedImage from "./like.svg";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-function MainPage({ posts, lightMode, updateColorTheme }) {
+function MainPage({ setPosts, posts, lightMode, updateColorTheme }) {
   const navigate = useNavigate();
   const goToAddPostPage = () => {
     navigate("/add-post");
+  };
+
+  const handleLike = (index) => {
+    const updatedPosts = posts.map((post, i) => {
+      if (i === index) {
+        const newLikes = post.liked ? post.likes : post.likes + 1;
+        return { ...post, likes: newLikes, liked: true };
+      }
+      return post;
+    });
+    setPosts(updatedPosts);
   };
 
   return (
@@ -50,6 +63,25 @@ function MainPage({ posts, lightMode, updateColorTheme }) {
                     {post.link}
                   </a>
                 )}
+                <button
+                  onClick={() => handleLike(index)}
+                  style={{
+                    border: "none",
+                    padding: 0,
+                    backgroundColor: "white",
+                  }}
+                >
+                  <p>Likes: {post.likes}</p>
+                  <img
+                    src={post.liked ? likedImage : likeImage}
+                    alt="Like Button"
+                    style={{
+                      width: "20px",
+                      height: "20px",
+                      padding: "10px",
+                    }}
+                  />
+                </button>
               </div>
             ))
           ) : (
