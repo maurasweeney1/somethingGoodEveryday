@@ -27,6 +27,15 @@ header h1 {
   font-size: 2.5rem;
 }
 
+a {
+  color: #0af;
+  text-decoration: underline; 
+}
+
+a:hover {
+  color: #8af;
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -68,6 +77,11 @@ header.light-mode {
   background-color: rgb(100, 150, 175); 
 }
 
+.light-mode .post-panel {
+  background-color: white; 
+  border: 1px solid #ccc;   
+}
+
 body.dark-mode {
   background-color: black;
   color: white;
@@ -75,6 +89,17 @@ body.dark-mode {
 
 header.dark-mode {
   background-color: rgba(50, 75, 100);
+}
+
+.dark-mode .post-panel {
+  background-color: #333;      
+  color: white;  
+  border: 1px solid #555;   
+}
+
+.dark-mode .add-post-button {    
+  color: white;  
+  background-color: rgb(25, 25, 25)    
 }
 
 header {
@@ -95,4 +120,40 @@ header .App-logo {
 
 header button:hover {
   background-color: #ddd;
+}
+
+.post-grid {
+  display: flex;  
+  flex-wrap: wrap;  
+  gap: 16px; 
+  justify-content: center; 
+}
+
+.post-panel, .new-post {
+  flex: 1 0 300px;  
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 20px;   
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
+  background-color: white;
+  text-align: center;
+}
+
+.post-panel {
+  max-width: 300px;
+}
+
+.new-post {
+  width: 500px;
+}
+
+.add-post-button {
+  font-size: 50px;
+  height: 200px;
+  width: 300px;
+  border: none;
+}
+
+.add-post-button:hover {
+  background-color: #d9d8d8;
 }
