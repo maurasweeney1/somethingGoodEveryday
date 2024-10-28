@@ -64,9 +64,17 @@ body.light-mode {
   color: black;
 }
 
+header.light-mode {
+  background-color: rgb(100, 150, 175); 
+}
+
 body.dark-mode {
   background-color: black;
   color: white;
+}
+
+header.dark-mode {
+  background-color: rgba(50, 75, 100);
 }
 
 header {
