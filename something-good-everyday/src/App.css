@@ -1,0 +1,90 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+  color: #333;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  text-align: center;
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  padding: 20px;
+}
+
+header {
+  background-color: #333;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+header h1 {
+  font-size: 2.5rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  width: 100%;
+}
+
+.panel {
+  background-color: #eee;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.panel img {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 10px;
+}
+
+.panel p {
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+.App-logo {
+  width: 40px;
+  height: auto;
+}
+
+body.light-mode {
+  background-color: white;
+  color: black;
+}
+
+body.dark-mode {
+  background-color: black;
+  color: white;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; 
+  width: 100vw; 
+  padding: 10px 20px; 
+  background-color: rgb(80, 120, 150, .8); 
+  box-sizing: border-box; 
+}
+
+header span, 
+header button, 
+header .App-logo {
+  margin-right: 10px
+}
+
+header button:hover {
+  background-color: #ddd;
+}
