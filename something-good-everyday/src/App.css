@@ -35,7 +35,8 @@ a:hover {
   background-color: rgb(100, 150, 175, .5);
   margin: 0;
   padding: 0;
-  padding-bottom: 10px;border-radius: 10px;
+  padding-bottom: 10px;
+  border-radius: 10px;
 }
 
 .App-logo {

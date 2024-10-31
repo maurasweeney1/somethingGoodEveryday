@@ -1,0 +1,24 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+something-good-everyday/node_modules
+something-good-everyday/.pnp
+something-good-everyday/.pnp.js
+
+# testing
+something-good-everyday/coverage
+
+# production
+something-good-everyday/build
+
+# misc
+something-good-everyday/.DS_Store
+something-good-everyday/.env.local
+something-good-everyday/.env.development.local
+something-good-everyday/.env.test.local
+something-good-everyday/.env.production.local
+
+something-good-everyday/npm-debug.log*
+something-good-everyday/yarn-debug.log*
+something-good-everyday/yarn-error.log*
+.DS_Store
