@@ -30,6 +30,11 @@ a:hover {
   color: #8af;
 }
 
+button {
+  background-color: white;
+  color: black;
+}
+
 .panel-header {
   border-bottom: 2px solid #888;
   background-color: rgb(100, 150, 175, .5);
@@ -48,6 +53,14 @@ body.light-mode {
   background-color: white;
   color: black;
 }
+body.light-mode .search-bar input,
+body.light-mode .filters select,
+body.light-mode input[type="date"],
+body.light-mode button {
+  background-color: white;
+  color: black;
+  border: 1px solid #ccc;
+}
 
 header.light-mode {
   background-color: rgb(100, 150, 175); 
@@ -61,6 +74,14 @@ header.light-mode {
 body.dark-mode {
   background-color: black;
   color: white;
+}
+body.dark-mode .search-bar input,
+body.dark-mode input[type="date"],
+body.dark-mode .filters select,
+body.dark-mode button{
+  background-color: #333;
+  color: white;
+  border: 1px solid #444;
 }
 
 header.dark-mode {

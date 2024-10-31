@@ -74,6 +74,7 @@ function AddPostPage({ addNewPost }) {
               value={category}
               onChange={(e) => setCategory(e.target.value)}
             >
+              <option value="">Select a category</option>
               <option value="General">General</option>
               <option value="Quotes">Quotes</option>
               <option value="Stories">Stories</option>
