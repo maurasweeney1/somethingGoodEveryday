@@ -1,5 +1,3 @@
-// TODO: edit posts
-
 import logo from "./logo.png";
 import likeImage from "./not-liked.svg";
 import likedImage from "./like.svg";
@@ -93,22 +91,26 @@ function MainPage({ setPosts, posts, lightMode, updateColorTheme }) {
           {/* if they chose date posted */}
           {filterType === "date" && (
             <div>
-              <label>Start Date:</label>
-              <input
-                type="date"
-                value={dateRange.startDate}
-                onChange={(e) =>
-                  setDateRange({ ...dateRange, startDate: e.target.value })
-                }
-              />
-              <label>End Date:</label>
-              <input
-                type="date"
-                value={dateRange.endDate}
-                onChange={(e) =>
-                  setDateRange({ ...dateRange, endDate: e.target.value })
-                }
-              />
+              <p>
+                <label>Start Date: </label>
+                <input
+                  type="date"
+                  value={dateRange.startDate}
+                  onChange={(e) =>
+                    setDateRange({ ...dateRange, startDate: e.target.value })
+                  }
+                />
+              </p>
+              <p>
+                <label>End Date: </label>
+                <input
+                  type="date"
+                  value={dateRange.endDate}
+                  onChange={(e) =>
+                    setDateRange({ ...dateRange, endDate: e.target.value })
+                  }
+                />
+              </p>
             </div>
           )}
 
@@ -199,7 +201,11 @@ function MainPage({ setPosts, posts, lightMode, updateColorTheme }) {
                   />
                 </button>
                 <p>
-                  Posted on: {new Date(post.datePosted).toLocaleDateString()}
+                  Posted on: {new Date(post.datePosted).toLocaleDateString()}{" "}
+                  &#x09;
+                  <button onClick={() => navigate(`/edit/${post.id}`)}>
+                    Edit
+                  </button>
                 </p>
               </div>
             ))

@@ -1,14 +1,18 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { v4 as uuidv4 } from "uuid";
+import { useParams, useNavigate } from "react-router-dom";
 
-function AddPostPage({ addNewPost }) {
+function EditPostPage({ posts, updatePost }) {
+  // get postid from the route
+  const { postId } = useParams();
   const navigate = useNavigate();
-  const [category, setCategory] = useState("General");
-  const [title, setTitle] = useState("");
-  const [text, setText] = useState("");
-  const [link, setLink] = useState("");
-  const [image, setImage] = useState(null);
+
+  const post = posts.find((thisPost) => thisPost.id === postId);
+
+  const [category, setCategory] = useState(post.category);
+  const [title, setTitle] = useState(post.title);
+  const [text, setText] = useState(post.text);
+  const [link, setLink] = useState(post.link);
+  const [image, setImage] = useState(post.image);
   const [error, setError] = useState("");
 
   const handleTitle = (e) => {
@@ -48,26 +52,23 @@ function AddPostPage({ addNewPost }) {
       return; // exit if there are errors
     }
 
-    const newPost = {
-      id: uuidv4(),
+    const updatedPost = {
+      ...post,
       category,
       title,
       text,
-      image,
       link,
-      likes: 0,
-      liked: false,
+      image,
       datePosted: new Date().toISOString(),
     };
 
-    addNewPost(newPost);
+    updatePost(post.id, updatedPost);
     navigate("/");
   };
 
   return (
-    <div className="new-post">
-      <h1>Add a New Post</h1>
-      {/* add a post */}
+    <div className="edit-post">
+      <h1>Edit Post</h1>
       <form onSubmit={handleSubmit}>
         <p>
           <label>
@@ -92,25 +93,25 @@ function AddPostPage({ addNewPost }) {
               onChange={handleTitle}
               rows="2"
               cols="50"
-              placeholder="Add title..."
+              placeholder="Edit title..."
             />
           </label>
         </p>
         <p>
           <label>
-            Write Your Post (Max 200 characters):
+            Edit Your Post (Max 200 characters):
             <textarea
               value={text}
               onChange={handleText}
               rows="6"
               cols="50"
-              placeholder="Type your text here..."
+              placeholder="Edit your text here..."
             />
           </label>
         </p>
         <p>
           <label>
-            Add a Link:
+            Edit the Link:
             <input
               type="url"
               value={link}
@@ -121,21 +122,20 @@ function AddPostPage({ addNewPost }) {
         </p>
         <p>
           <label>
-            Add an Image:
+            Change the Image:
             <input type="file" accept="image/*" onChange={handleImage} />
           </label>
         </p>
         <p>
           {image && (
             <img
-              src={URL.createObjectURL(image)}
+              src={image}
               alt="Preview"
               style={{ width: "200px", marginTop: "10px" }}
             />
           )}
         </p>
-        <button type="submit">Submit Post</button>
-
+        <button type="submit">Save Changes</button>
         {error && (
           <p style={{ color: "red", whiteSpace: "pre-line" }}>{error}</p>
         )}
@@ -144,4 +144,4 @@ function AddPostPage({ addNewPost }) {
   );
 }
 
-export default AddPostPage;
+export default EditPostPage;

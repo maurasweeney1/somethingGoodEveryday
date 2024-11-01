@@ -53,6 +53,7 @@ body.light-mode {
   background-color: white;
   color: black;
 }
+
 body.light-mode .search-bar input,
 body.light-mode .filters select,
 body.light-mode input[type="date"],
@@ -75,6 +76,7 @@ body.dark-mode {
   background-color: black;
   color: white;
 }
+
 body.dark-mode .search-bar input,
 body.dark-mode input[type="date"],
 body.dark-mode .filters select,
@@ -82,6 +84,10 @@ body.dark-mode button{
   background-color: #333;
   color: white;
   border: 1px solid #444;
+}
+
+body.dark-mode button:hover {
+  color: black;
 }
 
 header.dark-mode {
@@ -126,7 +132,7 @@ header button:hover {
   justify-content: center; 
 }
 
-.post-panel, .new-post {
+.post-panel, .new-post, .edit-post {
   flex: 1 0 300px;  
   border: 1px solid #ccc;
   border-radius: 10px;
@@ -139,7 +145,7 @@ header button:hover {
   max-width: 300px;
 }
 
-.new-post {
+.new-post, .edit-post {
   width: 500px;
 }
 
@@ -147,6 +153,7 @@ header button:hover {
   font-size: 50px;
   height: 200px;
   width: 300px;
+  border-radius: 10px;
   border: none;
 }
 
