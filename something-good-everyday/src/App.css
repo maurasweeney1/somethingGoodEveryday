@@ -15,6 +15,7 @@ header {
   padding: 20px;
   text-align: center;
   margin-bottom: 20px;
+  align-items: center;
 }
 
 header h1 {
@@ -33,6 +34,10 @@ a:hover {
 button {
   background-color: white;
   color: black;
+}
+
+.edit-button, .delete-button {
+  margin: 8px;
 }
 
 .panel-header {
@@ -80,10 +85,19 @@ body.dark-mode {
 body.dark-mode .search-bar input,
 body.dark-mode input[type="date"],
 body.dark-mode .filters select,
-body.dark-mode button{
+body.dark-mode button {
   background-color: #333;
   color: white;
   border: 1px solid #444;
+}
+
+body.dark-mode .title,
+body.dark-mode .color-theme {
+  color: rgb(100, 150, 175);
+}
+.title {
+  display: flex;
+  align-items: center;
 }
 
 body.dark-mode button:hover {
@@ -121,10 +135,6 @@ header .App-logo {
   margin-right: 10px
 }
 
-header button:hover {
-  background-color: #ddd;
-}
-
 .post-grid {
   display: flex;  
   flex-wrap: wrap;  
@@ -157,6 +167,6 @@ header button:hover {
   border: none;
 }
 
-.add-post-button:hover {
-  background-color: #d9d8d8;
+body button:hover, header button:hover {
+  background-color: #ddd;
 }

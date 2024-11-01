@@ -61,10 +61,19 @@ function MainPage({ setPosts, posts, lightMode, updateColorTheme }) {
     setPosts(updatedPosts);
   };
 
+  const handleDelete = () => {};
+
   return (
     <div>
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+        <div className="title">
+          <div>
+            <img src={logo} className="App-logo" alt="logo" />
+          </div>
+          <div>
+            <h3>Something Good Everyday</h3>
+          </div>
+        </div>
         <div>
           <form onSubmit={handleSearch} className="search-bar">
             <input
@@ -134,7 +143,9 @@ function MainPage({ setPosts, posts, lightMode, updateColorTheme }) {
 
         <div>
           {/* light/dark mode */}
-          <span>Color Theme: {lightMode ? "Light Mode " : "Dark Mode "}</span>
+          <span className="color-theme">
+            Color Theme: {lightMode ? "Light Mode " : "Dark Mode "}
+          </span>
           <button
             id="color-theme-button"
             onClick={() => updateColorTheme(!lightMode)}
@@ -202,9 +213,14 @@ function MainPage({ setPosts, posts, lightMode, updateColorTheme }) {
                 </button>
                 <p>
                   Posted on: {new Date(post.datePosted).toLocaleDateString()}{" "}
-                  &#x09;
-                  <button onClick={() => navigate(`/edit/${post.id}`)}>
+                  <button
+                    className="edit-button"
+                    onClick={() => navigate(`/edit/${post.id}`)}
+                  >
                     Edit
+                  </button>
+                  <button className="delete-button" onClick={handleDelete}>
+                    Delete
                   </button>
                 </p>
               </div>
