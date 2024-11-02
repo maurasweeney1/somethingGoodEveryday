@@ -63,7 +63,6 @@ function MainPage({ setPosts, posts, lightMode, updateColorTheme }) {
 
   const handleDelete = (postId) => {
     setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
-    console.log(posts);
   };
 
   return (

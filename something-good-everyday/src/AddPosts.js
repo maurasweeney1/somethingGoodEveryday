@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 
 function AddPostPage({ addNewPost }) {
   const navigate = useNavigate();
-  const [category, setCategory] = useState("General");
+  const [category, setCategory] = useState("");
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
   const [link, setLink] = useState("");
@@ -34,6 +34,10 @@ function AddPostPage({ addNewPost }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     let error = "";
+
+    if (category === "") {
+      setCategory("General");
+    }
 
     if (title.length === 0) {
       error += "Title is required\n";
@@ -76,7 +80,7 @@ function AddPostPage({ addNewPost }) {
               value={category}
               onChange={(e) => setCategory(e.target.value)}
             >
-              <option value="General">Select a category</option>
+              <option value="">Select a category</option>
               <option value="General">General</option>
               <option value="Quotes">Quotes</option>
               <option value="Stories">Stories</option>
