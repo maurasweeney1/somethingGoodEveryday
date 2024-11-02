@@ -35,9 +35,7 @@ function AddPostPage({ addNewPost }) {
     e.preventDefault();
     let error = "";
 
-    if (category === "") {
-      setCategory("General");
-    }
+    const finalCategory = category === "" ? "General" : category;
 
     if (title.length === 0) {
       error += "Title is required\n";
@@ -54,7 +52,7 @@ function AddPostPage({ addNewPost }) {
 
     const newPost = {
       id: uuidv4(),
-      category,
+      category: finalCategory,
       title,
       text,
       image,

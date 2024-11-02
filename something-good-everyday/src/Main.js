@@ -35,7 +35,18 @@ function MainPage({ setPosts, posts, lightMode, updateColorTheme }) {
         const datePosted = new Date(post.datePosted);
         const start = new Date(dateRange.startDate);
         const end = new Date(dateRange.endDate);
-        return datePosted >= start && datePosted <= end;
+
+        start.setHours(0, 0, 0, 0);
+        end.setHours(23, 59, 59, 999); // End of the day
+        end.setDate(end.getDate() + 1);
+        start.setDate(start.getDate() + 1);
+
+        console.log("Date Posted:", datePosted);
+        console.log("Start Date:", start);
+        console.log("End Date:", end);
+
+        const result = datePosted >= start && datePosted <= end;
+        return result;
       }
       return true; // if not date filter, show post
     };

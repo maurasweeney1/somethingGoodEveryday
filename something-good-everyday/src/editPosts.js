@@ -129,7 +129,7 @@ function EditPostPage({ posts, updatePost }) {
         <p>
           {image && (
             <img
-              src={image}
+              src={URL.createObjectURL(image)}
               alt="Preview"
               style={{ width: "200px", marginTop: "10px" }}
             />
