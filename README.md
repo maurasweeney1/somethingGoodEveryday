@@ -3,12 +3,12 @@
 
 # Something Good Everyday
 
-Description: clear, short. Describe importance, what it does
+Description: A website which acts as a source for positivity and inspiration. Users can add an anonymous post that fits in a given category about anything they want, with text, a link, and/or an image.
 
-Installation: how to install your project locally
+Installation: After downloading files, install react and react-router-dom, and run in your local environment with "npm start"
 
-Usage: how to use your project after install, screenshots of project.
+Usage: Use the site by adding, editing, or deleting posts
 
-Credits: author(s) of project
+Credits: Maura Sweeney
 
-License: license of project (MIT)
+License: MIT license 
