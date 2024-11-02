@@ -256,8 +256,8 @@ function MainPage({ setPosts, posts, lightMode, updateColorTheme }) {
             }}
           >
             Welcome to Something Good Everyday-- a source for positivity and
-            inspiration. Add an anonymous post below about anything you want (an
-            idea, quote, link to a story, image, ...)
+            inspiration. Add an anonymous post about anything you want (an idea,
+            quote, link to a story, image, ...)
           </p>
         </div>
       </footer>
