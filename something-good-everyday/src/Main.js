@@ -53,15 +53,18 @@ function MainPage({ setPosts, posts, lightMode, updateColorTheme }) {
   const handleLike = (index) => {
     const updatedPosts = posts.map((post, i) => {
       if (i === index) {
-        const newLikes = post.liked ? post.likes : post.likes + 1;
-        return { ...post, likes: newLikes, liked: true };
+        const newLikes = post.liked ? post.likes - 1 : post.likes + 1;
+        return { ...post, likes: newLikes, liked: !post.liked };
       }
       return post;
     });
     setPosts(updatedPosts);
   };
 
-  const handleDelete = () => {};
+  const handleDelete = (postId) => {
+    setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
+    console.log(posts);
+  };
 
   return (
     <div>
@@ -194,6 +197,7 @@ function MainPage({ setPosts, posts, lightMode, updateColorTheme }) {
                   )}
                 </p>
                 <button
+                  className="like-button"
                   onClick={() => handleLike(index)}
                   style={{
                     border: "none",
@@ -219,7 +223,10 @@ function MainPage({ setPosts, posts, lightMode, updateColorTheme }) {
                   >
                     Edit
                   </button>
-                  <button className="delete-button" onClick={handleDelete}>
+                  <button
+                    className="delete-button"
+                    onClick={() => handleDelete(post.id)}
+                  >
                     Delete
                   </button>
                 </p>

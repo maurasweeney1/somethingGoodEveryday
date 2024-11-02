@@ -170,3 +170,7 @@ header .App-logo {
 body button:hover, header button:hover {
   background-color: #ddd;
 }
+
+.like-button:hover {
+  background-color: white;
+}
