@@ -9,6 +9,7 @@ function App() {
   const [posts, setPosts] = useState([]);
   const [lightMode, setLightMode] = useState(true);
 
+  // Fetch posts when component mounts
   useEffect(() => {
     const fetchPosts = async () => {
       try {
@@ -120,6 +121,7 @@ function App() {
     }
   };
 
+  // Helper function to convert image to base64
   const convertImageToBase64 = (file) => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -154,7 +156,7 @@ function App() {
           path="/edit/:postId"
           element={<EditPostPage posts={posts} updatePost={updatePost} />}
         />
-        ;{/* url not found */}
+        {/* url not found */}
         <Route
           path="*"
           element={
