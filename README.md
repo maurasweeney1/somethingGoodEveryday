@@ -35,7 +35,7 @@ Something Good Everyday is a website which acts as a source for positivity and i
 
 ## Notes
 * The backend is powered by Express.js and MongoDB for efficient data storage and retrieval.
-* The frontend is built using React for a dynamic user experience.
+* The frontend is built using React and Node.js for a dynamic user experience.
 * Likes, links, and images are all supported for each post, making the content more engaging.
 
 ## Contributing
