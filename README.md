@@ -1,14 +1,52 @@
-# README
-
-
 # Something Good Everyday
 
-Description: A website which acts as a source for positivity and inspiration. Users can add an anonymous post that fits in a given category about anything they want, with text, a link, and/or an image.
+Something Good Everyday is a website which acts as a source for positivity and inspiration. Users can add an anonymous post that fits in a given category about anything they want, with text, a link, and/or an image.
 
-Installation: After downloading files, install react and react-router-dom, and run in your local environment with "npm start"
+## Setup
+1. Clone the Repository
+  git clone <repository-url>
+  cd something-good-everyday
+2. Install dependencies
+   npm install
+3. Set Up the Database
+   Install and configure MongoDB if not already installed.
+   Start a MongoDB server locally or provide a connection string to a remote MongoDB instance.
+4. Configure Environment Variables
+   Create a .env file in the project root with the following variables:
+      PORT=5001
+      MONGO_URI=your_mongodb_connection_string
+5. Start the Backend Server
+   cd backend
+   Start the Express.js server:
+     npm run server
+6. Run the React Frontend
+  Open a new terminal and cd frontend
+  Start the React development server:
+     npm start
+7. Open in Your Browser
+  Navigate to http://localhost:3000 to view the application.
 
-Usage: Use the site by adding, editing, or deleting posts
 
-Credits: Maura Sweeney
+## Usage
+* Add an uplifting post with text, an image, and/or a link.
+* Browse existing posts sorted by category, content, or date posted.
+* Edit or delete your posts anonymously.
+* Like posts to show appreciation for shared positivity.
 
-License: MIT license 
+## Notes
+* The backend is powered by Express.js and MongoDB for efficient data storage and retrieval.
+* The frontend is built using React and Node.js for a dynamic user experience.
+* Likes, links, and images are all supported for each post, making the content more engaging.
+
+## Contributing
+To contribute to the project:
+1. Fork the repository.
+2. Create a new branch for your feature or bug fix.
+3. Make changes and commit them with clear messages.
+4. Push to your branch and open a pull request.
+
+## Credits
+Developed by **Maura Sweeney**
+
+## License
+This project is licensed under the MIT License. Feel free to use, modify, and share as needed.
