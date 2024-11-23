@@ -49,6 +49,41 @@ app.post("/add-post", async (req, res) => {
   }
 });
 
+app.post("/like", async (req, res) => {
+  try {
+    const { postId } = req.body;
+
+    const post = await Post.findById(postId);
+    if (!post) {
+      return res.status(404).json({ error: "Post not found" });
+    }
+
+    // Initialize likes if it doesn't exist
+    if (typeof post.likes !== "number") {
+      post.likes = 0;
+    }
+
+    // Initialize liked if it doesn't exist
+    if (typeof post.liked !== "boolean") {
+      post.liked = false;
+    }
+
+    // Toggle the liked status
+    post.liked = !post.liked;
+    post.likes = post.liked ? post.likes + 1 : Math.max(0, post.likes - 1);
+
+    const savedPost = await post.save();
+    console.log("Saved post:", savedPost);
+
+    res.json({
+      likes: post.likes,
+      liked: post.liked,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // TODO: need to make users sign in so they can only delete THEIR posts
 
 // UPDATE post

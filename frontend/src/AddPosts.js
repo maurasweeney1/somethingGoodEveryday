@@ -61,6 +61,7 @@ function AddPostPage({ addNewPost }) {
       liked: false,
       datePosted: new Date().toISOString(),
     };
+    console.log(finalCategory);
 
     addNewPost(newPost);
     navigate("/");

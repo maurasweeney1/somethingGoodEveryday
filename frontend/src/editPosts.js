@@ -4,6 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 function EditPostPage({ posts, updatePost }) {
   // get postid from the route
   const { postId } = useParams();
+  console.log(postId);
   const navigate = useNavigate();
 
   const post = posts.find((thisPost) => thisPost.id === postId);

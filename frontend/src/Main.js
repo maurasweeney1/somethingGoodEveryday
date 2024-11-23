@@ -61,15 +61,53 @@ function MainPage({ setPosts, posts, lightMode, updateColorTheme }) {
     return search && date() && category();
   });
 
-  const handleLike = (index) => {
-    const updatedPosts = posts.map((post, i) => {
-      if (i === index) {
-        const newLikes = post.liked ? post.likes - 1 : post.likes + 1;
-        return { ...post, likes: newLikes, liked: !post.liked };
+  const handleLike = async (index) => {
+    try {
+      const postId = posts[index]._id;
+
+      const optimisticPosts = posts.map((post, i) => {
+        if (i === index) {
+          return {
+            ...post,
+            likes: post.liked ? post.likes - 1 : post.likes + 1,
+            liked: !post.liked,
+          };
+        }
+        return post;
+      });
+      setPosts(optimisticPosts);
+
+      const response = await fetch("http://localhost:5001/like", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ postId }),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error("Failed to update like");
       }
-      return post;
-    });
-    setPosts(updatedPosts);
+
+      const data = await response.json();
+
+      const updatedPosts = posts.map((post, i) => {
+        if (i === index) {
+          return {
+            ...post,
+            likes: data.likes,
+            liked: data.liked,
+          };
+        }
+        return post;
+      });
+      setPosts(updatedPosts);
+    } catch (error) {
+      console.error("Detailed error in handleLike:", error);
+      const originalPosts = [...posts];
+      setPosts(originalPosts);
+    }
   };
 
   const handleDelete = (postId) => {
@@ -183,9 +221,7 @@ function MainPage({ setPosts, posts, lightMode, updateColorTheme }) {
               <div key={index} className="post-panel">
                 <h1 className="panel-header">{post.title}</h1>
                 <h3>{post.category}</h3>
-                <p>
-                  {post.text && post.text.trim() !== "" && <p>{post.text}</p>}
-                </p>
+                <p>{post.text && post.text.trim() !== "" && post.text}</p>
                 <p>
                   {post.image && (
                     <img
