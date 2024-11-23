@@ -86,7 +86,6 @@ function MainPage({ setPosts, posts, lightMode, updateColorTheme }) {
       });
 
       if (!response.ok) {
-        const errorText = await response.text();
         throw new Error("Failed to update like");
       }
 

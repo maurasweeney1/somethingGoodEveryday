@@ -1,16 +1,17 @@
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
+require("dotenv").config();
 
 const app = express();
-const PORT = process.env.PORT || 5001;
+const PORT = process.env.PORT || 5000;
+const MONGO_URI = process.env.MONGO_URI;
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 
 // MongoDB Connection
-mongoose.connect("mongodb://localhost:27017/someGoodPosts");
+mongoose.connect(MONGO_URI);
 
 // Post Schema
 const PostSchema = new mongoose.Schema({
@@ -49,6 +50,7 @@ app.post("/add-post", async (req, res) => {
   }
 });
 
+// POST update like
 app.post("/like", async (req, res) => {
   try {
     const { postId } = req.body;

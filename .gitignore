@@ -22,3 +22,5 @@ something-good-everyday/npm-debug.log*
 something-good-everyday/yarn-debug.log*
 something-good-everyday/yarn-error.log*
 .DS_Store
+
+.env
