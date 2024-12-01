@@ -103,7 +103,7 @@ function MainPage({ setPosts, posts, lightMode, updateColorTheme }) {
       });
       setPosts(updatedPosts);
     } catch (error) {
-      console.error("Detailed error in handleLike:", error);
+      console.error("Error updating like:", error);
       const originalPosts = [...posts];
       setPosts(originalPosts);
     }

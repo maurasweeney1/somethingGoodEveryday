@@ -32,7 +32,7 @@ const PostSchema = new mongoose.Schema({
   image: String,
   datePosted: { type: Date, default: Date.now },
   likes: { type: Number, default: 0 },
-  liked: { type: Boolean, default: false },
+  likedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
 });
 
 // User Schema
@@ -73,7 +73,7 @@ app.post("/add-post", upload.single("image"), async (req, res) => {
       image,
       datePosted,
       likes: 0,
-      liked: false,
+      likedBy: [],
     });
 
     const savedPost = await newPost.save();
@@ -87,32 +87,29 @@ app.post("/add-post", upload.single("image"), async (req, res) => {
 app.post("/like", async (req, res) => {
   try {
     const { postId } = req.body;
+    // TODO FIXME get logged-in user's data set by a middleware
+    const userId = req.user._id;
 
     const post = await Post.findById(postId);
     if (!post) {
       return res.status(404).json({ error: "Post not found" });
     }
 
-    // Initialize likes if it doesn't exist
-    if (typeof post.likes !== "number") {
-      post.likes = 0;
+    // If already liked post, unlike it
+    if (post.likedBy.includes(userId)) {
+      post.likedBy.pull(userId);
+      post.likes -= 1;
+    } else {
+      // like the post
+      post.likedBy.push(userId);
+      post.likes += 1;
     }
-
-    // Initialize liked if it doesn't exist
-    if (typeof post.liked !== "boolean") {
-      post.liked = false;
-    }
-
-    // Toggle the liked status
-    post.liked = !post.liked;
-    post.likes = post.liked ? post.likes + 1 : Math.max(0, post.likes - 1);
 
     const savedPost = await post.save();
-    console.log("Saved post:", savedPost);
 
     res.json({
-      likes: post.likes,
-      liked: post.liked,
+      likes: savedPost.likes,
+      liked: post.likedBy.includes(userId),
     });
   } catch (error) {
     res.status(500).json({ error: error.message });

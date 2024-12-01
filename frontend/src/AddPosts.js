@@ -58,7 +58,7 @@ function AddPostPage({ addNewPost }) {
       image,
       link,
       likes: 0,
-      liked: false,
+      likedBy: [],
       datePosted: new Date().toISOString(),
     };
 
