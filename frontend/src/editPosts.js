@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
 function EditPostPage({ posts, updatePost }) {
@@ -9,12 +9,25 @@ function EditPostPage({ posts, updatePost }) {
 
   const post = posts.find((thisPost) => thisPost.id === postId);
 
-  const [category, setCategory] = useState(post.category);
-  const [title, setTitle] = useState(post.title);
-  const [text, setText] = useState(post.text);
-  const [link, setLink] = useState(post.link);
-  const [image, setImage] = useState(post.image);
+  const [category, setCategory] = useState("");
+  const [title, setTitle] = useState("");
+  const [text, setText] = useState("");
+  const [link, setLink] = useState("");
+  const [image, setImage] = useState(null);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (post) {
+      // set state when post is found
+      setCategory(post.category);
+      setTitle(post.title);
+      setText(post.text);
+      setLink(post.link);
+      setImage(post.image);
+    } else {
+      navigate("*");
+    }
+  }, [post, navigate]);
 
   const handleTitle = (e) => {
     if (e.target.value.length > 0) {

@@ -1,6 +1,10 @@
-import MainPage from "./Main.js";
+import MainPage from "./Home.js";
 import AddPostsPage from "./AddPosts.js";
 import EditPostPage from "./editPosts.js";
+import ProtectedRoute from "./ProtectedRoute";
+import RegisterPage from "./Register.js";
+import SignInPage from "./SignIn.js";
+import LandingPage from "./Landing.js";
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import React, { useState, useEffect } from "react";
@@ -8,12 +12,25 @@ import React, { useState, useEffect } from "react";
 function App() {
   const [posts, setPosts] = useState([]);
   const [lightMode, setLightMode] = useState(true);
+  const [authToken, setAuthTokenState] = useState(
+    localStorage.getItem("authToken") || null
+  );
 
   // Fetch posts when component mounts
   useEffect(() => {
     const fetchPosts = async () => {
+      const authToken = localStorage.getItem("authToken");
+
+      if (!authToken) return;
+
       try {
-        const response = await fetch("http://localhost:5001/");
+        const response = await fetch("http://localhost:5001/", {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+            "Content-Type": "application/json",
+          },
+        });
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
@@ -131,19 +148,34 @@ function App() {
     });
   };
 
+  const setAuthToken = (token) => {
+    if (token) {
+      // Save token to local storage
+      localStorage.setItem("authToken", token);
+    } else {
+      // Remove token from local storage on logout
+      localStorage.removeItem("authToken");
+    }
+    setAuthTokenState(token);
+  };
+
   return (
     <BrowserRouter>
       <Routes>
+        {/* landing page */}
+        <Route path="/" element={<LandingPage />} />
         {/* main page */}
         <Route
-          path="/"
+          path="/home"
           element={
-            <MainPage
-              setPosts={setPosts}
-              posts={posts}
-              lightMode={lightMode}
-              updateColorTheme={updateColorTheme}
-            />
+            <ProtectedRoute>
+              <MainPage
+                setPosts={setPosts}
+                posts={posts}
+                lightMode={lightMode}
+                updateColorTheme={updateColorTheme}
+              />
+            </ProtectedRoute>
           }
         />
         {/* add post page */}
@@ -155,6 +187,14 @@ function App() {
         <Route
           path="/edit/:postId"
           element={<EditPostPage posts={posts} updatePost={updatePost} />}
+        />
+        <Route
+          path="/register"
+          element={<RegisterPage setAuthToken={setAuthToken} />}
+        />
+        <Route
+          path="/signIn"
+          element={<SignInPage setAuthToken={setAuthToken} />}
         />
         {/* url not found */}
         <Route
