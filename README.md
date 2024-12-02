@@ -7,23 +7,28 @@ Something Good Everyday is a website which acts as a source for positivity and i
   git clone <repository-url>
   cd something-good-everyday
 2. Install dependencies
-   npm install
-3. Set Up the Database
+   ensuring npm and node.js are installed
+   Install backend dependencies
+     npm install express cors mongoose bcryptjs validatorjs jwt-simple multer
+   Instal frontend dependencies
+     npm install react react-dom react-router-dom
+4. Set Up the Database
    Install and configure MongoDB if not already installed.
    Start a MongoDB server locally or provide a connection string to a remote MongoDB instance.
-4. Configure Environment Variables
+5. Configure Environment Variables
    Create a .env file in the project root with the following variables:
       PORT=5001
       MONGO_URI=your_mongodb_connection_string
-5. Start the Backend Server
+      SECRET=your_secret_jwt_key
+6. Start the Backend Server
    cd backend
    Start the Express.js server:
      npm run server
-6. Run the React Frontend
+7. Run the React Frontend
   Open a new terminal and cd frontend
   Start the React development server:
      npm start
-7. Open in Your Browser
+8. Open in Your Browser
   Navigate to http://localhost:3000 to view the application.
 
 
