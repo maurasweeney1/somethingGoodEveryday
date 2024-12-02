@@ -100,7 +100,7 @@ app.post(
   authenticateUser,
   upload.single("image"),
   async (req, res) => {
-    const { user, category, title, text, link, datePosted } = req.body;
+    const { category, title, text, link, datePosted } = req.body;
 
     try {
       const image = req.file ? req.file.buffer.toString("base64") : null;

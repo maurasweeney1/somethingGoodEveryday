@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 function MainPage({ setPosts, posts, lightMode, updateColorTheme }) {
+  const userId = localStorage.getItem("userId");
   const [searchQuery, setSearchQuery] = useState("");
   const [filterType, setFilterType] = useState(""); // date posted or category
   const [dateRange, setDateRange] = useState({ startDate: "", endDate: "" });
@@ -202,18 +203,19 @@ function MainPage({ setPosts, posts, lightMode, updateColorTheme }) {
           )}
         </div>
 
-        <div>
-          {/* light/dark mode */}
-          <span className="color-theme">
-            Color Theme: {lightMode ? "Light Mode " : "Dark Mode "}
-          </span>
-          <button
-            id="color-theme-button"
-            onClick={() => updateColorTheme(!lightMode)}
-          >
-            {lightMode ? "Dark Mode " : "Light Mode "}
-          </button>
-        </div>
+        {/* light/dark mode */}
+        <span className="color-theme">
+          Color Theme: {lightMode ? "Light Mode " : "Dark Mode "}
+        </span>
+        <button
+          id="color-theme-button"
+          onClick={() => updateColorTheme(!lightMode)}
+        >
+          {lightMode ? "Dark Mode " : "Light Mode "}
+        </button>
+        <button className="sign-out-button" onClick={() => navigate("/signIn")}>
+          Sign Out
+        </button>
       </header>
       <main>
         {/* view posts */}
@@ -273,19 +275,24 @@ function MainPage({ setPosts, posts, lightMode, updateColorTheme }) {
                 </button>
                 <p>
                   Posted on: {new Date(post.datePosted).toLocaleDateString()}{" "}
-                  <button
-                    className="edit-button"
-                    onClick={() => navigate(`/edit/${post._id}`)}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    className="delete-button"
-                    onClick={() => handleDelete(post._id)}
-                  >
-                    Delete
-                  </button>
                 </p>
+                {/* Only show the Edit/Delete buttons if the current user owns the post */}
+                {post.user === userId && (
+                  <>
+                    <button
+                      className="edit-button"
+                      onClick={() => navigate(`/edit/${post._id}`)}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="delete-button"
+                      onClick={() => handleDelete(post._id)}
+                    >
+                      Delete
+                    </button>
+                  </>
+                )}
               </div>
             ))
           ) : (

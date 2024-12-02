@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import logo from "./logo.png";
+import "./postPage.css";
 
 function EditPostPage({ posts, updatePost, token }) {
   // get postid from the route
@@ -96,79 +98,96 @@ function EditPostPage({ posts, updatePost, token }) {
   };
 
   return (
-    <div className="edit-post">
-      <h1>Edit Post</h1>
-      <form onSubmit={handleSubmit}>
-        <p>
-          <label>
-            Choose a Category:
-            <select
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-            >
-              <option value="General">Select a category</option>
-              <option value="General">General</option>
-              <option value="Quotes">Quotes</option>
-              <option value="Stories">Stories</option>
-              <option value="Advice">Advice</option>
-              <option value="Images">Images</option>
-            </select>
-          </label>
-        </p>
-        <p>
-          <label>
-            <textarea
-              value={title}
-              onChange={handleTitle}
-              rows="2"
-              cols="50"
-              placeholder="Edit title..."
-            />
-          </label>
-        </p>
-        <p>
-          <label>
-            Edit Your Post (Max 200 characters):
-            <textarea
-              value={text}
-              onChange={handleText}
-              rows="6"
-              cols="50"
-              placeholder="Edit your text here..."
-            />
-          </label>
-        </p>
-        <p>
-          <label>
-            Edit the Link:
-            <input
-              type="url"
-              value={link}
-              onChange={(e) => setLink(e.target.value)}
-              placeholder="https://example.com"
-            />
-          </label>
-        </p>
-        <p>
-          <label>
-            Change the Image:
-            <input type="file" accept="image/*" onChange={handleImage} />
-          </label>
-        </p>
-        <p>
-          {image && (
-            <img
-              src={URL.createObjectURL(image)}
-              alt="Preview"
-              style={{ width: "200px", marginTop: "10px" }}
-            />
+    <div>
+      <header className="edit-post-header">
+        <div>
+          <button className="home-button" onClick={() => navigate("/home")}>
+            ←
+          </button>
+        </div>
+        <div className="title">
+          <div>
+            <img src={logo} className="App-logo" alt="logo" />
+          </div>
+          <div>
+            <h3>Something Good Everyday</h3>
+          </div>
+        </div>
+      </header>
+      <div className="edit-post">
+        <h1>Edit Post</h1>
+        <form onSubmit={handleSubmit}>
+          <p>
+            <label>
+              Choose a Category:
+              <select
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+              >
+                <option value="General">Select a category</option>
+                <option value="General">General</option>
+                <option value="Quotes">Quotes</option>
+                <option value="Stories">Stories</option>
+                <option value="Advice">Advice</option>
+                <option value="Images">Images</option>
+              </select>
+            </label>
+          </p>
+          <p>
+            <label>
+              <textarea
+                value={title}
+                onChange={handleTitle}
+                rows="2"
+                cols="50"
+                placeholder="Edit title..."
+              />
+            </label>
+          </p>
+          <p>
+            <label>
+              Edit Your Post (Max 200 characters):
+              <textarea
+                value={text}
+                onChange={handleText}
+                rows="6"
+                cols="50"
+                placeholder="Edit your text here..."
+              />
+            </label>
+          </p>
+          <p>
+            <label>
+              Edit the Link:
+              <input
+                type="url"
+                value={link}
+                onChange={(e) => setLink(e.target.value)}
+                placeholder="https://example.com"
+              />
+            </label>
+          </p>
+          <p>
+            <label>
+              Change the Image:
+              <input type="file" accept="image/*" onChange={handleImage} />
+            </label>
+          </p>
+          <p>
+            {image && (
+              <img
+                src={URL.createObjectURL(image)}
+                alt="Preview"
+                style={{ width: "200px", marginTop: "10px" }}
+              />
+            )}
+          </p>
+          <button type="submit">Save Changes</button>
+          {error && (
+            <p style={{ color: "red", whiteSpace: "pre-line" }}>{error}</p>
           )}
-        </p>
-        <button type="submit">Save Changes</button>
-        {error && (
-          <p style={{ color: "red", whiteSpace: "pre-line" }}>{error}</p>
-        )}
-      </form>
+        </form>
+      </div>
     </div>
   );
 }

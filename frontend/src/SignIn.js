@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import "./logIn.css";
 
 function SignInPage({ setAuthToken, setUserId }) {
   const [username, setUsername] = useState("");
@@ -36,30 +37,33 @@ function SignInPage({ setAuthToken, setUserId }) {
   };
 
   return (
-    <div>
+    <div className="signin-container">
       <h1>Login</h1>
-      <form onSubmit={handleLogin}>
-        <label>
-          Username:
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
-        </label>
-        <label>
-          Password:
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </label>
-        <button type="submit">Login</button>
+      <form onSubmit={handleLogin} className="signin-form">
+        <input
+          className="input-field"
+          type="text"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
+        <input
+          className="input-field"
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <button type="submit" className="submit-button">
+          Sign In
+        </button>
+        {error && <p style={{ color: "red" }}>{error}</p>}
       </form>
       {error && <p style={{ color: "red" }}>{error}</p>}
+      <p>No account?</p>
+      <button className="register-button" onClick={() => navigate("/register")}>
+        Register
+      </button>
     </div>
   );
 }

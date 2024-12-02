@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import "./logIn.css";
 
 function LandingPage() {
   const navigate = useNavigate();
@@ -12,13 +13,24 @@ function LandingPage() {
   }, [navigate]);
 
   return (
-    <div style={{ textAlign: "center", marginTop: "50px" }}>
-      <h1>Welcome to the Website</h1>
+    <div
+      className="signin-container"
+      style={{ textAlign: "center", marginTop: "50px" }}
+    >
+      <h1>Welcome to Something Good Everyday</h1>
       <p>Please register or log in to continue.</p>
-      <button onClick={() => navigate("/register")} style={{ margin: "10px" }}>
+      <button
+        className="register-button"
+        onClick={() => navigate("/register")}
+        style={{ margin: "10px" }}
+      >
         Register
       </button>
-      <button onClick={() => navigate("/signIn")} style={{ margin: "10px" }}>
+      <button
+        className="sign-in-button"
+        onClick={() => navigate("/signIn")}
+        style={{ margin: "10px" }}
+      >
         Log In
       </button>
     </div>

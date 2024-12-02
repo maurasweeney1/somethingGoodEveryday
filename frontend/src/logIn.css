@@ -1,0 +1,93 @@
+/* Body styling for the entire page */
+body {
+    font-family: Arial, sans-serif;
+    background-color: rgb(200, 225, 225);
+    /* Page background */
+    color: #333;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    text-align: center;
+}
+
+/* Sign-in container styling */
+.signin-container {
+    font-family: Arial, sans-serif;
+    background-color: rgb(80, 120, 150, 0.8);
+    color: #333;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 2rem;
+    box-sizing: border-box;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* Heading styling */
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+/* Form styling */
+.signin-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* Input fields styling */
+.input-field {
+    padding: 0.8rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.input-field:focus {
+    outline: none;
+    border: 2px solid rgb(0, 25, 75);
+}
+
+/* Error message styling */
+.error-message {
+    color: red;
+    font-size: 1rem;
+}
+
+/* Register button prompt styling */
+.register-prompt {
+    margin-top: 1rem;
+    font-size: 1rem;
+}
+
+/* Buttons styling */
+.sign-in-button,
+.register-button,
+.submit-button {
+    background-color: #fff;
+    color: rgb(25, 75, 125);
+    border: 2px solid rgb(0, 25, 75);
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.sign-in-button,
+.register-button {
+    padding: 0.2rem 1rem;
+}
+ 
+.register-button:hover,
+.submit-button:hover,
+.sign-in-button:hover {
+    background-color: #f0f0f0;
+    color: rgb(15, 75, 100);
+    border-color: rgb(15, 75, 100);
+}
