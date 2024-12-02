@@ -15,11 +15,11 @@ Something Good Everyday is a website which acts as a source for positivity and i
    
    Install backend dependencies
    
-       `npm install express cors mongoose bcryptjs validatorjs jwt-simple multer`
+       npm install express cors mongoose bcryptjs validatorjs jwt-simple multer
      
    Instal frontend dependencies
    
-       `npm install react react-dom react-router-dom`
+       npm install react react-dom react-router-dom
      
 4. Set Up the Database
    
@@ -31,11 +31,11 @@ Something Good Everyday is a website which acts as a source for positivity and i
    
    Create a .env file in the project root with the following variables:
    
-        ```PORT=5001
+        PORT=5001
    
         MONGO_URI=your_mongodb_connection_string
    
-        SECRET=your_secret_jwt_key```
+        SECRET=your_secret_jwt_key
    
 6. Start the Backend Server
    
@@ -43,7 +43,7 @@ Something Good Everyday is a website which acts as a source for positivity and i
    
    Start the Express.js server:
    
-       `npm run server`
+       npm run server
    
 7. Run the React Frontend
    
@@ -51,7 +51,7 @@ Something Good Everyday is a website which acts as a source for positivity and i
   
   Start the React development server
   
-       `npm start`
+       npm start
      
 8. Open in Your Browser
     
