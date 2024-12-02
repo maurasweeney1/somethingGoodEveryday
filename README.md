@@ -5,9 +5,9 @@ Something Good Everyday is a website which acts as a source for positivity and i
 ## Setup
 1. Clone the Repository
 
-   `git clone <repository-url>`
-  
-   `cd something-good-everyday`
+   `git clone [<repository-url>](https://github.com/GU-Web-Dev-2024/cpsc-332-web-dev-final-project-maurasweeney1.git)`
+
+   `cd cpsc-332-web-dev-final-project-maurasweeney`
   
 3. Install dependencies
 
@@ -19,7 +19,7 @@ Something Good Everyday is a website which acts as a source for positivity and i
      
    Instal frontend dependencies
    
-       npm install react react-dom react-router-dom
+       npm install react react-router-dom
      
 4. Set Up the Database
    
@@ -43,7 +43,7 @@ Something Good Everyday is a website which acts as a source for positivity and i
    
    Start the Express.js server:
    
-       npm run server
+       node server.js
    
 7. Run the React Frontend
    
