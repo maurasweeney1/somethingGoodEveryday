@@ -5,9 +5,9 @@ Something Good Everyday is a website which acts as a source for positivity and i
 ## Setup
 1. Clone the Repository
 
-  git clone <repository-url>
+      git clone <repository-url>
   
-  cd something-good-everyday
+      cd something-good-everyday
   
 3. Install dependencies
 
