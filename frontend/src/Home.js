@@ -101,8 +101,27 @@ function MainPage({ setPosts, posts, lightMode, updateColorTheme }) {
     }
   };
 
-  const handleDelete = (postId) => {
-    setPosts((prevPosts) => prevPosts.filter((post) => post._id !== postId));
+  const handleDelete = async (postId) => {
+    try {
+      const authToken = localStorage.getItem("authToken");
+      const response = await fetch(`http://localhost:5001/delete/${postId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${authToken}`,
+        },
+      });
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("Full error response:", errorText);
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      await response.json();
+      setPosts((prevPosts) => prevPosts.filter((post) => post._id !== postId));
+    } catch (error) {
+      console.error("Error deleting post: ", error);
+    }
   };
 
   return (

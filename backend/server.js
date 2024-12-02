@@ -274,19 +274,6 @@ app.put("/edit/:postId", authenticateUser, async (req, res) => {
     if (!post.user.equals(req.user._id))
       return res.status(403).json({ message: "Unauthorized" });
 
-    if (!post.user.equals(req.user._id)) {
-      return res
-        .status(403)
-        .json({ message: "Unauthorized to edit this post" });
-    }
-
-    // update post with new data
-    // const updatedData = {
-    //   category: req.body.category,
-    //   title: req.body.title,
-    //   text: req.body.text,
-    //   link: req.body.link,
-    // };
     const updatedData = { ...req.body };
 
     if (req.body.image) {
@@ -304,14 +291,23 @@ app.put("/edit/:postId", authenticateUser, async (req, res) => {
 });
 
 // DELETE post
-// app.delete("/delete/:id", async (req, res) => {
-//   try {
-//     await Post.findByIdAndDelete(req.params.id);
-//     res.status(200).json({ message: "Post deleted" });
-//   } catch (error) {
-//     res.status(500).json({ message: error.message });
-//   }
-// });
+app.delete("/delete/:postId", authenticateUser, async (req, res) => {
+  const { postId } = req.params;
+  try {
+    const post = await Post.findById(postId);
+
+    if (!post) return res.status(404).json({ message: "Post not found" });
+
+    // check user is authorized to delete
+    if (!post.user.equals(req.user._id))
+      return res.status(403).json({ message: "Unauthorized" });
+
+    await Post.findByIdAndDelete(postId);
+    res.status(200).json({ message: "Post deleted" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
 
 // Mount router
 app.use("/", router);
