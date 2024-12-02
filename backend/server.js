@@ -30,9 +30,10 @@ const PostSchema = new mongoose.Schema({
   text: String,
   link: String,
   image: String,
-  datePosted: { type: Date, default: Date.now },
   likes: { type: Number, default: 0 },
   likedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+  user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+  datePosted: { type: Date, default: Date.now },
 });
 
 // User Schema
@@ -51,19 +52,15 @@ const authenticateUser = async (req, res, next) => {
   const token = req.headers.authorization?.split(" ")[1];
 
   if (!token) {
-    console.log("No token provided");
     return res.status(401).json({ message: "No token provided" });
   }
 
   try {
     const payload = jwt.decode(token, process.env.SECRET);
-    console.log("Decoded payload:", payload);
 
     const user = await User.findOne({ username: payload.username });
-    console.log("Authenticated user:", user);
 
     if (!user) {
-      console.log("Invalid token: user not found");
       return res.status(401).json({ message: "Invalid token" });
     }
 
@@ -71,7 +68,6 @@ const authenticateUser = async (req, res, next) => {
     req.user = user;
     next();
   } catch (error) {
-    console.error("Token error:", error.message);
     return res.status(401).json({ message: "Invalid or expired token" });
   }
 };
@@ -99,29 +95,34 @@ app.get("/", async (req, res) => {
 });
 
 // POST new post
-app.post("/add-post", upload.single("image"), async (req, res) => {
-  try {
-    const { category, title, text, link, datePosted } = req.body;
-    // Convert image to base64
-    const image = req.file ? req.file.buffer.toString("base64") : null;
+app.post(
+  "/add-post",
+  authenticateUser,
+  upload.single("image"),
+  async (req, res) => {
+    const { user, category, title, text, link, datePosted } = req.body;
 
-    const newPost = new Post({
-      category,
-      title,
-      text,
-      link,
-      image,
-      datePosted,
-      likes: 0,
-      likedBy: [],
-    });
+    try {
+      const image = req.file ? req.file.buffer.toString("base64") : null;
+      const newPost = new Post({
+        category,
+        title,
+        text,
+        link,
+        image,
+        datePosted,
+        likes: 0,
+        likedBy: [],
+        user: req.user._id,
+      });
 
-    const savedPost = await newPost.save();
-    res.status(201).json(savedPost);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
+      const savedPost = await newPost.save();
+      res.status(201).json(savedPost);
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
   }
-});
+);
 
 // POST update like
 app.post("/like", authenticateUser, async (req, res) => {
@@ -155,7 +156,6 @@ app.post("/like", authenticateUser, async (req, res) => {
   }
 });
 
-// TODO: need to make users sign in so they can only delete THEIR posts
 router.post("/register", async (req, res) => {
   let data = {
     username: req.body.username,
@@ -220,6 +220,7 @@ router.post("/signIn", async (req, res) => {
     message: "Authentication successful",
     token,
     username: user.username,
+    userId: user._id,
   });
 });
 
@@ -247,16 +248,60 @@ router.get("/status", async (req, res) => {
 });
 
 // UPDATE post
-// app.put("/edit/:postId", async (req, res) => {
-//   try {
-//     const updatedPost = await Post.findByIdAndUpdate(req.params.id, req.body, {
-//       new: true,
-//     });
-//     res.json(updatedPost);
-//   } catch (error) {
-//     res.status(400).json({ message: error.message });
-//   }
-// });
+app.get("/edit/:postId", authenticateUser, async (req, res) => {
+  const { postId } = req.params;
+
+  try {
+    const post = await Post.findById(postId);
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    res.json(post);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching post" });
+  }
+});
+
+app.put("/edit/:postId", authenticateUser, async (req, res) => {
+  const { postId } = req.params;
+  try {
+    // user owns post/has authorization
+    const post = await Post.findById(postId);
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+    if (!post.user.equals(req.user._id))
+      return res.status(403).json({ message: "Unauthorized" });
+
+    if (!post.user.equals(req.user._id)) {
+      return res
+        .status(403)
+        .json({ message: "Unauthorized to edit this post" });
+    }
+
+    // update post with new data
+    // const updatedData = {
+    //   category: req.body.category,
+    //   title: req.body.title,
+    //   text: req.body.text,
+    //   link: req.body.link,
+    // };
+    const updatedData = { ...req.body };
+
+    if (req.body.image) {
+      updatedData.image = req.body.image;
+    }
+
+    const updatedPost = await Post.findByIdAndUpdate(postId, updatedData, {
+      new: true,
+    });
+
+    res.json(updatedPost);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
 
 // DELETE post
 // app.delete("/delete/:id", async (req, res) => {

@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
-function EditPostPage({ posts, updatePost }) {
+function EditPostPage({ posts, updatePost, token }) {
   // get postid from the route
   const { postId } = useParams();
-  console.log(postId);
   const navigate = useNavigate();
 
-  const post = posts.find((thisPost) => thisPost.id === postId);
+  const post = posts.find((thisPost) => thisPost._id === postId);
 
   const [category, setCategory] = useState("");
   const [title, setTitle] = useState("");
@@ -17,17 +16,33 @@ function EditPostPage({ posts, updatePost }) {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    if (post) {
-      // set state when post is found
-      setCategory(post.category);
-      setTitle(post.title);
-      setText(post.text);
-      setLink(post.link);
-      setImage(post.image);
-    } else {
-      navigate("*");
-    }
-  }, [post, navigate]);
+    const fetchPost = async () => {
+      try {
+        const response = await fetch(`http://localhost:5001/edit/${postId}`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (!response.ok) {
+          throw new Error("Failed to fetch post");
+        }
+
+        const post = await response.json();
+
+        setCategory(post.category);
+        setTitle(post.title);
+        setText(post.text);
+        setLink(post.link);
+        setImage(post.image);
+      } catch (err) {
+        console.error(err);
+        setError("Failed to load post data");
+      }
+    };
+
+    fetchPost();
+  }, [postId, token, navigate]);
 
   const handleTitle = (e) => {
     if (e.target.value.length > 0) {
@@ -76,8 +91,8 @@ function EditPostPage({ posts, updatePost }) {
       datePosted: new Date().toISOString(),
     };
 
-    updatePost(post.id, updatedPost);
-    navigate("/");
+    updatePost(post._id, updatedPost, token);
+    navigate("/home");
   };
 
   return (

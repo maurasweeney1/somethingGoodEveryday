@@ -15,6 +15,7 @@ function App() {
   const [authToken, setAuthTokenState] = useState(
     localStorage.getItem("authToken") || null
   );
+  const [userId, setUserId] = useState(null);
 
   // Fetch posts when component mounts
   useEffect(() => {
@@ -51,7 +52,7 @@ function App() {
     };
 
     fetchPosts();
-  }, []);
+  }, [authToken]);
 
   const updateColorTheme = (isLightMode) => {
     setLightMode(isLightMode);
@@ -86,11 +87,14 @@ function App() {
         image: imageBase64,
       };
 
+      const token = localStorage.getItem("token");
+
       // Send post to server
       const response = await fetch("http://localhost:5001/add-post", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(postData),
       });
@@ -111,29 +115,29 @@ function App() {
     }
   };
 
-  const updatePost = async (postId, updatedPost) => {
+  const updatePost = async (postId, updatedPost, token) => {
     try {
-      // If there's a new image file, convert it to base64
+      // convert image to base64
       let imageBase64 = null;
       if (updatedPost.image instanceof File) {
         imageBase64 = await convertImageToBase64(updatedPost.image);
         updatedPost.image = imageBase64;
       }
 
-      // Send update to server
       const response = await fetch(`http://localhost:5001/edit/${postId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(updatedPost),
       });
 
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-
       const updatedData = await response.json();
+
+      if (!response.ok) {
+        throw new Error("Failed to update post");
+      }
 
       // Update local state
       setPosts((prevPosts) =>
@@ -190,17 +194,25 @@ function App() {
         {/* add post page */}
         <Route
           path="/add-post"
-          element={<AddPostsPage addNewPost={addNewPost} />}
+          element={<AddPostsPage addNewPost={addNewPost} userId={userId} />}
         />
         {/* edit post page */}
         <Route
           path="/edit/:postId"
-          element={<EditPostPage posts={posts} updatePost={updatePost} />}
+          element={
+            <EditPostPage
+              posts={posts}
+              updatePost={updatePost}
+              token={authToken}
+            />
+          }
         />
         <Route path="/register" element={<RegisterPage />} />
         <Route
           path="/signIn"
-          element={<SignInPage setAuthToken={setAuthToken} />}
+          element={
+            <SignInPage setAuthToken={setAuthToken} setUserId={setUserId} />
+          }
         />
         {/* url not found */}
         <Route

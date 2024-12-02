@@ -102,7 +102,7 @@ function MainPage({ setPosts, posts, lightMode, updateColorTheme }) {
   };
 
   const handleDelete = (postId) => {
-    setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
+    setPosts((prevPosts) => prevPosts.filter((post) => post._id !== postId));
   };
 
   return (
@@ -256,13 +256,13 @@ function MainPage({ setPosts, posts, lightMode, updateColorTheme }) {
                   Posted on: {new Date(post.datePosted).toLocaleDateString()}{" "}
                   <button
                     className="edit-button"
-                    onClick={() => navigate(`/edit/${post.id}`)}
+                    onClick={() => navigate(`/edit/${post._id}`)}
                   >
                     Edit
                   </button>
                   <button
                     className="delete-button"
-                    onClick={() => handleDelete(post.id)}
+                    onClick={() => handleDelete(post._id)}
                   >
                     Delete
                   </button>

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 
-function AddPostPage({ addNewPost }) {
+function AddPostPage({ addNewPost, userId }) {
   const navigate = useNavigate();
   const [category, setCategory] = useState("");
   const [title, setTitle] = useState("");
@@ -60,6 +60,7 @@ function AddPostPage({ addNewPost }) {
       likes: 0,
       likedBy: [],
       datePosted: new Date().toISOString(),
+      user: userId,
     };
 
     addNewPost(newPost);
