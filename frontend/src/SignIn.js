@@ -21,6 +21,9 @@ function SignInPage({ setAuthToken }) {
       if (data.token) {
         // save token if returned
         setAuthToken(data.token);
+        // When login is successful
+        localStorage.setItem("token", response.token);
+        localStorage.setItem("username", response.username);
         navigate("/home");
       } else {
         throw new Error("No token received");

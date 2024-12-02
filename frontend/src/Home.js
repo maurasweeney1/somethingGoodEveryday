@@ -41,10 +41,6 @@ function MainPage({ setPosts, posts, lightMode, updateColorTheme }) {
         end.setDate(end.getDate() + 1);
         start.setDate(start.getDate() + 1);
 
-        console.log("Date Posted:", datePosted);
-        console.log("Start Date:", start);
-        console.log("End Date:", end);
-
         const result = datePosted >= start && datePosted <= end;
         return result;
       }
@@ -65,28 +61,24 @@ function MainPage({ setPosts, posts, lightMode, updateColorTheme }) {
     try {
       const postId = posts[index]._id;
 
-      const optimisticPosts = posts.map((post, i) => {
-        if (i === index) {
-          return {
-            ...post,
-            likes: post.liked ? post.likes - 1 : post.likes + 1,
-            liked: !post.liked,
-          };
-        }
-        return post;
-      });
-      setPosts(optimisticPosts);
+      const authToken = localStorage.getItem("authToken");
+
+      if (!authToken) {
+        alert("Please sign in to like posts");
+        return;
+      }
 
       const response = await fetch("http://localhost:5001/like", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${authToken}`,
         },
         body: JSON.stringify({ postId }),
       });
 
       if (!response.ok) {
-        throw new Error("Failed to update like");
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
 
       const data = await response.json();

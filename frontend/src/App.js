@@ -19,11 +19,14 @@ function App() {
   // Fetch posts when component mounts
   useEffect(() => {
     const fetchPosts = async () => {
-      const authToken = localStorage.getItem("authToken");
-
-      if (!authToken) return;
+      if (!authToken) {
+        console.log("no token");
+        return;
+      }
 
       try {
+        const authToken = localStorage.getItem("authToken");
+
         const response = await fetch("http://localhost:5001/", {
           method: "GET",
           headers: {
@@ -31,13 +34,19 @@ function App() {
             "Content-Type": "application/json",
           },
         });
+
         if (!response.ok) {
+          if (response.status === 401) {
+            console.log("No valid token, please log in");
+            return;
+          }
           throw new Error("Network response was not ok");
         }
         const data = await response.json();
         setPosts(data);
       } catch (error) {
         console.error("Error fetching posts:", error);
+        setPosts([]);
       }
     };
 
@@ -188,10 +197,7 @@ function App() {
           path="/edit/:postId"
           element={<EditPostPage posts={posts} updatePost={updatePost} />}
         />
-        <Route
-          path="/register"
-          element={<RegisterPage setAuthToken={setAuthToken} />}
-        />
+        <Route path="/register" element={<RegisterPage />} />
         <Route
           path="/signIn"
           element={<SignInPage setAuthToken={setAuthToken} />}

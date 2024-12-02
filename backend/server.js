@@ -47,10 +47,50 @@ const UserSchema = new mongoose.Schema(
 const Post = mongoose.model("Post", PostSchema);
 const User = mongoose.model("User", UserSchema);
 
+const authenticateUser = async (req, res, next) => {
+  const token = req.headers.authorization?.split(" ")[1];
+
+  if (!token) {
+    console.log("No token provided");
+    return res.status(401).json({ message: "No token provided" });
+  }
+
+  try {
+    const payload = jwt.decode(token, process.env.SECRET);
+    console.log("Decoded payload:", payload);
+
+    const user = await User.findOne({ username: payload.username });
+    console.log("Authenticated user:", user);
+
+    if (!user) {
+      console.log("Invalid token: user not found");
+      return res.status(401).json({ message: "Invalid token" });
+    }
+
+    // get user
+    req.user = user;
+    next();
+  } catch (error) {
+    console.error("Token error:", error.message);
+    return res.status(401).json({ message: "Invalid or expired token" });
+  }
+};
+
 // Routes
 // GET all posts
 app.get("/", async (req, res) => {
   try {
+    const token = req.headers.authorization?.split(" ")[1];
+
+    if (token) {
+      // authenticated only
+      try {
+        jwt.decode(token, process.env.SECRET);
+      } catch (error) {
+        return res.status(401).json({ message: "Invalid token" });
+      }
+    }
+
     const posts = await Post.find();
     res.json(posts);
   } catch (error) {
@@ -84,10 +124,9 @@ app.post("/add-post", upload.single("image"), async (req, res) => {
 });
 
 // POST update like
-app.post("/like", async (req, res) => {
+app.post("/like", authenticateUser, async (req, res) => {
   try {
     const { postId } = req.body;
-    // TODO FIXME get logged-in user's data set by a middleware
     const userId = req.user._id;
 
     const post = await Post.findById(postId);
@@ -177,7 +216,11 @@ router.post("/signIn", async (req, res) => {
   }
 
   const token = jwt.encode({ username: user.username }, process.env.SECRET);
-  res.status(200).json({ message: "Authentication successful", token });
+  res.status(200).json({
+    message: "Authentication successful",
+    token,
+    username: user.username,
+  });
 });
 
 router.get("/status", async (req, res) => {
