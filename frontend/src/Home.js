@@ -136,7 +136,7 @@ function MainPage({ setPosts, posts, lightMode, updateColorTheme }) {
             <h3>Something Good Everyday</h3>
           </div>
         </div>
-        <div>
+        <div class="search-container">
           <form onSubmit={handleSearch} className="search-bar">
             <input
               style={{ width: "300px" }}
@@ -148,7 +148,6 @@ function MainPage({ setPosts, posts, lightMode, updateColorTheme }) {
             <button type="submit">Search</button>
           </form>
         </div>
-
         <div className="filters">
           <select
             value={filterType}

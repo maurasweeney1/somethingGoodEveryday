@@ -97,14 +97,13 @@ img {
     color: white;
     border: 1px solid #555;
 }
-
 .dark-mode textarea,
 .dark-mode select,
 .dark-mode input[type="url"],
 .dark-mode input[type="file"] {
-    background-color: #3333336d;
+    background-color: #444;
     color: white;
-    border: 1px solid #444;
+    border: 1px solid #555;
 }
 
 .light-mode .new-post,
@@ -112,6 +111,7 @@ img {
     background-color: white;
     border: 1px solid #ccc;
 }
+
 .light-mode textarea,
 .light-mode select,
 .light-mode input[type="url"],

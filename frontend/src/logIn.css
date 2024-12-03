@@ -5,10 +5,6 @@ body {
     /* Page background */
     color: #333;
     height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    text-align: center;
 }
 
 /* Sign-in container styling */
@@ -47,6 +43,17 @@ h1 {
     border-radius: 8px;
     width: 100%;
     box-sizing: border-box;
+}
+
+.dark-mode .input-field {
+    background-color: #444;
+    color: white;
+    border: 1px solid #555;
+}
+
+.dark-mode p,
+.dark-mode h1 {
+    color: white
 }
 
 .input-field:focus {

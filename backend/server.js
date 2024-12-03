@@ -31,6 +31,21 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI;
 
+const sanitizer = (input) => {
+  if (input && typeof input === "object") {
+    for (let key in input) {
+      if (typeof input[key] === "string") {
+        // remove any mongodb query operators
+        input[key] = input[key].replace(/^\$/, "").replace(/\.\./g, "");
+      } else if (typeof input[key] === "object") {
+        // sanitize nested objects
+        sanitizer(input[key]);
+      }
+    }
+  }
+  return input;
+};
+
 app.use(
   cors({
     origin: "http://localhost:3000",
@@ -123,7 +138,7 @@ app.post(
   authenticateUser,
   upload.single("image"),
   async (req, res) => {
-    const { category, title, text, link, datePosted } = req.body;
+    const { category, title, text, link, datePosted } = sanitizer(req.body);
 
     try {
       const image = req.file ? `/uploads/${req.file.filename}` : null;
@@ -150,7 +165,7 @@ app.post(
 // POST update like
 app.post("/like", authenticateUser, async (req, res) => {
   try {
-    const { postId } = req.body;
+    const { postId } = sanitizer(req.body);
     const userId = req.user._id;
 
     const post = await Post.findById(postId);
@@ -180,9 +195,12 @@ app.post("/like", authenticateUser, async (req, res) => {
 });
 
 router.post("/register", async (req, res) => {
+  const username = sanitizer(req.body.username);
+  const password = sanitizer(req.body.password);
+
   let data = {
-    username: req.body.username,
-    password: req.body.password,
+    username: username,
+    password: password,
   };
 
   const rules = {
@@ -226,7 +244,7 @@ router.post("/register", async (req, res) => {
 });
 
 router.post("/signIn", async (req, res) => {
-  const { username, password } = req.body;
+  const { username, password } = sanitizer(req.body);
 
   // Find the user in the database
   const user = await User.findOne({ username: username });
@@ -248,7 +266,7 @@ router.post("/signIn", async (req, res) => {
 });
 
 router.get("/status", async (req, res) => {
-  const token = req.query.token;
+  const token = sanitizer(req.query.token);
 
   try {
     const payload = jwt.decode(token, process.env.SECRET);
@@ -272,7 +290,7 @@ router.get("/status", async (req, res) => {
 
 // UPDATE post
 app.get("/edit/:postId", authenticateUser, async (req, res) => {
-  const { postId } = req.params;
+  const { postId } = sanitizer(req.params);
 
   try {
     const post = await Post.findById(postId);
@@ -305,8 +323,8 @@ app.put(
   authenticateUser,
   upload.single("image"),
   async (req, res) => {
-    const { postId } = req.params;
-    const { category, title, text, link, datePosted } = req.body;
+    const { postId } = sanitizer(req.params);
+    const { category, title, text, link, datePosted } = sanitizer(req.body);
 
     try {
       const post = await Post.findById(postId);
@@ -345,7 +363,7 @@ app.put(
 );
 // DELETE post
 app.delete("/delete/:postId", authenticateUser, async (req, res) => {
-  const { postId } = req.params;
+  const { postId } = sanitizer(req.params);
   try {
     const post = await Post.findById(postId);
 
