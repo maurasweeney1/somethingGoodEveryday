@@ -28,9 +28,22 @@ function AddPostPage({ addNewPost, userId }) {
 
   const handleImage = (e) => {
     const file = e.target.files[0];
-    if (file) {
-      setImage(file);
+    if (!file) return;
+    const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+    const maxFileSize = 10 * 1024 * 1024;
+
+    if (!allowedTypes.includes(file.type)) {
+      setError(
+        "Unsupported file type. Please upload a JPEG, JPG, or PNG image."
+      );
+      return;
     }
+    if (file.size > maxFileSize) {
+      setError("File size exceeds the limit of 10MB.");
+      return;
+    }
+    setImage({ file, previewUrl: URL.createObjectURL(file) });
+    setError("");
   };
 
   const handleSubmit = (e) => {
@@ -39,11 +52,11 @@ function AddPostPage({ addNewPost, userId }) {
 
     const finalCategory = category === "" ? "General" : category;
 
-    if (title.length === 0) {
+    if (title.trim().length === 0) {
       error += "Title is required\n";
     }
 
-    if (text.length === 0 && image === null && link === "") {
+    if (text.trim().length === 0 && !image && link.trim().length === 0) {
       error += "Post content is required\n";
     }
 
@@ -57,7 +70,7 @@ function AddPostPage({ addNewPost, userId }) {
       category: finalCategory,
       title,
       text,
-      image,
+      image: image ? image.file : null,
       link,
       likes: 0,
       likedBy: [],
@@ -147,9 +160,9 @@ function AddPostPage({ addNewPost, userId }) {
             </label>
           </p>
           <p>
-            {image && (
+            {image && image.previewUrl && (
               <img
-                src={URL.createObjectURL(image)}
+                src={image.previewUrl}
                 alt="Preview"
                 style={{ width: "200px", marginTop: "10px" }}
               />

@@ -75,98 +75,78 @@ function App() {
 
   const addNewPost = async (newPost) => {
     try {
-      // If there's an image file, convert it to base64
-      let imageBase64 = null;
-      if (newPost.image) {
-        imageBase64 = await convertImageToBase64(newPost.image);
-      }
+      const formData = new FormData();
 
-      // Prepare post data
-      const postData = {
-        ...newPost,
-        image: imageBase64,
-      };
+      // Append all text fields
+      formData.append("category", newPost.category);
+      formData.append("title", newPost.title);
+      formData.append("text", newPost.text);
+      formData.append("link", newPost.link);
+      formData.append("datePosted", newPost.datePosted);
+
+      // Append image file if exists
+      if (newPost.image instanceof File) {
+        formData.append("image", newPost.image);
+      }
 
       const token = localStorage.getItem("token");
 
-      // Send post to server
       const response = await fetch("http://localhost:5001/add-post", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(postData),
+        body: formData,
       });
 
       if (!response.ok) {
-        throw new Error("Network response was not ok");
+        const errorBody = await response.text();
+        console.error("Server response:", errorBody);
+        throw new Error(
+          `HTTP error! status: ${response.status}, message: ${errorBody}`
+        );
       }
-
       const savedPost = await response.json();
 
-      // Update local state with the saved post from server
       setPosts([...posts, savedPost]);
-
       return savedPost;
     } catch (error) {
-      console.error("Error adding post:", error);
+      console.error("Detailed error adding post:", error);
       throw error;
     }
   };
 
   const updatePost = async (postId, updatedPost, token) => {
     try {
-      // convert image to base64
-      let imageBase64 = null;
-      if (updatedPost.image instanceof File) {
-        imageBase64 = await convertImageToBase64(updatedPost.image);
-        updatedPost.image = imageBase64;
-      }
-
       const response = await fetch(`http://localhost:5001/edit/${postId}`, {
         method: "PUT",
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(updatedPost),
+        body: updatedPost,
       });
 
-      const updatedData = await response.json();
-
       if (!response.ok) {
-        throw new Error("Failed to update post");
+        const errorText = await response.text();
+        console.error("Server error response:", errorText);
+        throw new Error(`Network response was not ok: ${errorText}`);
       }
 
-      // Update local state
-      setPosts((prevPosts) =>
-        prevPosts.map((post) => (post._id === postId ? updatedData : post))
-      );
+      const savedPost = await response.json();
 
-      return updatedData;
+      setPosts(posts.map((post) => (post._id === postId ? savedPost : post)));
+
+      return savedPost;
     } catch (error) {
-      console.error("Error updating post:", error);
+      console.error("Detailed error updating post:", error);
       throw error;
     }
   };
 
-  // Helper function to convert image to base64
-  const convertImageToBase64 = (file) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (error) => reject(error);
-    });
-  };
-
   const setAuthToken = (token) => {
     if (token) {
-      // Save token to local storage
       localStorage.setItem("authToken", token);
     } else {
-      // Remove token from local storage on logout
       localStorage.removeItem("authToken");
     }
     setAuthTokenState(token);

@@ -34,9 +34,19 @@ function EditPostPage({ posts, updatePost, token }) {
 
         setCategory(post.category);
         setTitle(post.title);
-        setText(post.text);
-        setLink(post.link);
-        setImage(post.image);
+        setText(post.text || "");
+        setLink(post.link || "");
+        if (post.image) {
+          // if the image path is already a full URL
+          const imageSrc = post.image.startsWith("http")
+            ? post.image
+            : `http://localhost:5001${post.image}`;
+
+          setImage({
+            previewUrl: imageSrc,
+            file: null,
+          });
+        }
       } catch (err) {
         console.error(err);
         setError("Failed to load post data");
@@ -44,7 +54,7 @@ function EditPostPage({ posts, updatePost, token }) {
     };
 
     fetchPost();
-  }, [postId, token, navigate]);
+  }, [postId, token]);
 
   const handleTitle = (e) => {
     if (e.target.value.length > 0) {
@@ -60,21 +70,36 @@ function EditPostPage({ posts, updatePost, token }) {
   };
 
   const handleImage = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setImage(file);
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+    const maxFileSize = 10 * 1024 * 1024;
+
+    if (!allowedTypes.includes(file.type)) {
+      setError(
+        "Unsupported file type. Please upload a JPEG, JPG, or PNG image."
+      );
+      return;
     }
+    if (file.size > maxFileSize) {
+      setError("File size exceeds the limit of 10MB.");
+      return;
+    }
+    setImage({
+      file: file,
+      previewUrl: URL.createObjectURL(file),
+    });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     let error = "";
 
-    if (title.length === 0) {
+    if (title.trim().length === 0) {
       error += "Title is required\n";
     }
 
-    if (text.length === 0 && image === null && link === "") {
+    if (text.trim().length === 0 && !image && link.trim().length === 0) {
       error += "Post content is required\n";
     }
 
@@ -83,18 +108,24 @@ function EditPostPage({ posts, updatePost, token }) {
       return; // exit if there are errors
     }
 
-    const updatedPost = {
-      ...post,
-      category,
-      title,
-      text,
-      link,
-      image,
-      datePosted: new Date().toISOString(),
-    };
+    const formData = new FormData();
+    formData.append("category", category || "General");
+    formData.append("title", title);
+    formData.append("text", text || "");
+    formData.append("link", link || "");
+    const datePosted = new Date().toISOString();
+    formData.append("datePosted", datePosted);
 
-    updatePost(post._id, updatedPost, token);
-    navigate("/home");
+    if (image?.file) {
+      formData.append("image", image.file);
+    }
+
+    try {
+      await updatePost(post._id, formData, token);
+      navigate("/home");
+    } catch (err) {
+      setError("Failed to update post");
+    }
   };
 
   return (
@@ -174,9 +205,9 @@ function EditPostPage({ posts, updatePost, token }) {
             </label>
           </p>
           <p>
-            {image && (
+            {image && image.previewUrl && (
               <img
-                src={URL.createObjectURL(image)}
+                src={image.previewUrl}
                 alt="Preview"
                 style={{ width: "200px", marginTop: "10px" }}
               />

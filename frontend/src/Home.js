@@ -237,7 +237,7 @@ function MainPage({ setPosts, posts, lightMode, updateColorTheme }) {
                 <p>
                   {post.image && (
                     <img
-                      src={URL.createObjectURL(post.image)}
+                      src={`http://localhost:5001${post.image}`}
                       alt="Post"
                       style={{ width: "150px", height: "auto" }}
                     />
