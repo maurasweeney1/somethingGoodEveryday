@@ -16,20 +16,24 @@ function SignInPage({ setAuthToken, setUserId }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
       });
-      if (!response.ok) throw new Error("Failed to login");
 
       const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          data.message || "Failed to login. Please check your credentials."
+        );
+      }
+
       if (data.token) {
         setUserId(data.userId);
-        // save token if returned
         setAuthToken(data.token);
-        // When login is successful
         localStorage.setItem("token", data.token);
         localStorage.setItem("username", data.username);
         localStorage.setItem("userId", data.userId);
         navigate("/home");
       } else {
-        throw new Error("No token received");
+        throw new Error("Authentication failed - no token received");
       }
     } catch (err) {
       setError(err.message);

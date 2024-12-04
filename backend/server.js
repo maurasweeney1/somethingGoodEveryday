@@ -61,7 +61,7 @@ mongoose.connect(MONGO_URI);
 // Post Schema
 const PostSchema = new mongoose.Schema({
   title: { type: String, required: true },
-  category: { type: String, required: true },
+  category: { type: String, required: true } || "General",
   text: String,
   link: String,
   image: String,
@@ -219,11 +219,18 @@ router.post("/register", async (req, res) => {
     const validation = new Validator(data, rules);
 
     if (validation.fails()) {
-      let message = `
-            username: ${validation.errors.first("username")}, 
-            password: ${validation.errors.first("password")}, 
-        `;
-      return res.status(400).json({ message: `Validation error: ${message}` });
+      // Create a more readable error message
+      let errors = [];
+      if (validation.errors.get("username")) {
+        errors.push(`Username ${validation.errors.first("username")}`);
+      }
+      if (validation.errors.get("password")) {
+        errors.push(`Password ${validation.errors.first("password")}`);
+      }
+
+      return res.status(400).json({
+        message: errors.join(", "),
+      });
     }
 
     const hashedPassword = await bcrypt.hash(data.password, 10);
@@ -361,6 +368,7 @@ app.put(
     }
   }
 );
+
 // DELETE post
 app.delete("/delete/:postId", authenticateUser, async (req, res) => {
   const { postId } = sanitizer(req.params);

@@ -86,9 +86,18 @@ body.dark-mode .search-bar input,
 body.dark-mode input[type="date"],
 body.dark-mode .filters select,
 body.dark-mode button {
-  background-color: #333;
+  background-color: #888;
   color: white;
   border: 1px solid #444;
+}
+
+.dark-mode .add-post-button {
+  border: none !important
+}
+
+.dark-mode .like-button {
+  background-color: #333 !important;
+  border: none !important
 }
 
 body.dark-mode .title,
@@ -117,7 +126,7 @@ header.dark-mode {
 
 .dark-mode .add-post-button {
   color: white;
-  background-color: rgb(25, 25, 25)
+  background-color: #333;
 }
 
 header {
@@ -129,6 +138,7 @@ header {
   background-color: rgb(80, 120, 150, .8);
   box-sizing: border-box;
   gap: 20px;
+  padding: 15px;
 }
 
 header span,
@@ -142,6 +152,7 @@ header .App-logo {
   flex-wrap: wrap;
   gap: 16px;
   justify-content: center;
+  padding: 20px;
 }
 
 .post-panel,
@@ -169,7 +180,6 @@ header .App-logo {
   font-size: 50px;
   height: 200px;
   width: 300px;
-  border-radius: 10px;
   border: none;
 }
 
@@ -204,6 +214,9 @@ header button:hover {
   outline: none;
   font-size: 14px;
 }
+.dark-mode .search-bar ::placeholder {
+  color: white;
+}
 
 .search-bar button {
   padding: 8px 16px;
@@ -227,12 +240,6 @@ select,
 .search-bar button {
   font-size: 12px;
   padding: 6px 10px;
-}
-
-.add-post-button {
-  font-size: 50px;
-  height: 200px;
-  width: 300px;
 }
 
 .search-bar input {
@@ -260,4 +267,24 @@ header button {
 
 .color-theme {
   display: none;
+}
+
+.like-button {
+  background: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+.post-panel a {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  display: block;
+  max-width: 100%;
+  padding: 0 10px;
+}
+
+/* Update the hover style for add-post button in dark mode */
+.dark-mode .add-post-button:hover {
+  background-color: #444 !important;
+  color: white;
 }
