@@ -2,7 +2,7 @@
     "name": "something-good-everyday",
     "version": "0.1.0",
     "scripts": {
-        "start": "concurrently \"npm run server\" \"npm run client\"",
+        "start": "concurrently \"npm run server\" \"npm run client\" \"node server.js\"",
         "server": "nodemon backend/server.js",
         "client": "npm start --prefix frontend"
     },

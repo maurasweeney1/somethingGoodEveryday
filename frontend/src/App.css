@@ -214,6 +214,7 @@ header button:hover {
   outline: none;
   font-size: 14px;
 }
+
 .dark-mode .search-bar ::placeholder {
   color: white;
 }
@@ -234,7 +235,7 @@ header button:hover {
   margin: 0;
 }
 
-button, 
+button,
 select,
 .filters select,
 .search-bar button {

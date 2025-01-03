@@ -23,4 +23,5 @@ something-good-everyday/yarn-debug.log*
 something-good-everyday/yarn-error.log*
 .DS_Store
 
+# Environment variables
 .env
