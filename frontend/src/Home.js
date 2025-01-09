@@ -136,7 +136,7 @@ function MainPage({ setPosts, posts, lightMode, updateColorTheme }) {
             <h3>Something Good Everyday</h3>
           </div>
         </div>
-        <div class="search-container">
+        <div className="search-container">
           <form onSubmit={handleSearch} className="search-bar">
             <input
               style={{ width: "300px" }}

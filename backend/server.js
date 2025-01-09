@@ -51,8 +51,10 @@ app.use(
     origin: [
       "http://localhost:3000",
       "https://somethinggoodeveryday.onrender.com",
+      "https://somethinggoodeveryday-api.onrender.com",
     ],
     credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   })
 );
 app.use(express.json({ limit: "10mb" }));
@@ -402,3 +404,17 @@ app.use("/", router);
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+// Add this at the end of your routes, before app.listen
+if (process.env.NODE_ENV === "production") {
+  // Handle options preflight
+  app.options("*", cors());
+
+  // Serve static files
+  app.use(express.static(path.join(__dirname, "../frontend/build")));
+
+  // Handle React routing
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "../frontend/build/index.html"));
+  });
+}
