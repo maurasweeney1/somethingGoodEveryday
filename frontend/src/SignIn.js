@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./logIn.css";
+import config from "./config";
 
 function SignInPage({ setAuthToken, setUserId }) {
   const [username, setUsername] = useState("");
@@ -11,7 +12,7 @@ function SignInPage({ setAuthToken, setUserId }) {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:5001/signIn", {
+      const response = await fetch(`${config.apiUrl}/signIn`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),

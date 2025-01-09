@@ -48,7 +48,10 @@ const sanitizer = (input) => {
 
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: [
+      "http://localhost:3000",
+      "https://somethinggoodeveryday.onrender.com",
+    ],
     credentials: true,
   })
 );
@@ -56,7 +59,11 @@ app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ limit: "10mb", extended: true }));
 
 // MongoDB Connection
-mongoose.connect(MONGO_URI);
+
+mongoose
+  .connect(MONGO_URI)
+  .then(() => console.log("Connected to MongoDB"))
+  .catch((err) => console.error("Could not connect to MongoDB:", err));
 
 // Post Schema
 const PostSchema = new mongoose.Schema({

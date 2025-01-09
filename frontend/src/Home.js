@@ -1,6 +1,7 @@
 import logo from "./logo.png";
 import likeImage from "./not-liked.svg";
 import likedImage from "./like.svg";
+import config from "./config";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -68,8 +69,7 @@ function MainPage({ setPosts, posts, lightMode, updateColorTheme }) {
         alert("Please sign in to like posts");
         return;
       }
-
-      const response = await fetch("http://localhost:5001/like", {
+      const response = await fetch(`${config.apiUrl}/like`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -105,7 +105,7 @@ function MainPage({ setPosts, posts, lightMode, updateColorTheme }) {
   const handleDelete = async (postId) => {
     try {
       const authToken = localStorage.getItem("authToken");
-      const response = await fetch(`http://localhost:5001/delete/${postId}`, {
+      const response = await fetch(`${config.apiUrl}/delete/${postId}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -236,7 +236,7 @@ function MainPage({ setPosts, posts, lightMode, updateColorTheme }) {
                 <p>
                   {post.image && (
                     <img
-                      src={`http://localhost:5001${post.image}`}
+                      src={`${config.apiUrl}${post.image}`}
                       alt="Post"
                       style={{ width: "150px", height: "auto" }}
                     />

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import logo from "./logo.png";
+import config from "./config";
 import "./postPage.css";
 
 function EditPostPage({ posts, updatePost, token }) {
@@ -20,7 +21,7 @@ function EditPostPage({ posts, updatePost, token }) {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const response = await fetch(`http://localhost:5001/edit/${postId}`, {
+        const response = await fetch(`${config.apiUrl}/edit/${postId}`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -40,7 +41,7 @@ function EditPostPage({ posts, updatePost, token }) {
           // if the image path is already a full URL
           const imageSrc = post.image.startsWith("http")
             ? post.image
-            : `http://localhost:5001${post.image}`;
+            : `${config.apiUrl}${post.image}`;
 
           setImage({
             previewUrl: imageSrc,

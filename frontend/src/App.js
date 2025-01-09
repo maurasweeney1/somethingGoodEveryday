@@ -5,6 +5,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import RegisterPage from "./Register.js";
 import SignInPage from "./SignIn.js";
 import LandingPage from "./Landing.js";
+import config from "./config";
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import React, { useState, useEffect } from "react";
@@ -28,7 +29,7 @@ function App() {
       try {
         const authToken = localStorage.getItem("authToken");
 
-        const response = await fetch("http://localhost:5001/", {
+        const response = await fetch(`${config.apiUrl}/`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${authToken}`,
@@ -91,7 +92,7 @@ function App() {
 
       const token = localStorage.getItem("token");
 
-      const response = await fetch("http://localhost:5001/add-post", {
+      const response = await fetch(`${config.apiUrl}/add-post`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -118,7 +119,7 @@ function App() {
 
   const updatePost = async (postId, updatedPost, token) => {
     try {
-      const response = await fetch(`http://localhost:5001/edit/${postId}`, {
+      const response = await fetch(`${config.apiUrl}/edit/${postId}`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,
