@@ -21,11 +21,6 @@ function App() {
   // Fetch posts when component mounts
   useEffect(() => {
     const fetchPosts = async () => {
-      if (!authToken) {
-        console.log("no token");
-        return;
-      }
-
       try {
         const authToken = localStorage.getItem("authToken");
 

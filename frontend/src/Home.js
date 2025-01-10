@@ -90,6 +90,7 @@ function MainPage({ setPosts, posts, lightMode, updateColorTheme }) {
             ...post,
             likes: data.likes,
             liked: data.liked,
+            likedBy: data.likedBy,
           };
         }
         return post;
@@ -263,7 +264,11 @@ function MainPage({ setPosts, posts, lightMode, updateColorTheme }) {
                 >
                   <p>Likes: {post.likes}</p>
                   <img
-                    src={post.liked ? likedImage : likeImage}
+                    src={
+                      post.liked || post.likedBy.includes(userId)
+                        ? likedImage
+                        : likeImage
+                    }
                     alt="Like Button"
                     style={{
                       width: "20px",
@@ -275,7 +280,6 @@ function MainPage({ setPosts, posts, lightMode, updateColorTheme }) {
                 <p>
                   Posted on: {new Date(post.datePosted).toLocaleDateString()}{" "}
                 </p>
-                {/* Only show the Edit/Delete buttons if the current user owns the post */}
                 {post.user === userId && (
                   <>
                     <button

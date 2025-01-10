@@ -8,6 +8,7 @@ const jwt = require("jwt-simple");
 // for converting images
 const multer = require("multer");
 const fs = require("fs");
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     const uploadPath = path.join(__dirname, "uploads");
@@ -20,6 +21,7 @@ const storage = multer.diskStorage({
     cb(null, `${Date.now()}-${file.originalname}`);
   },
 });
+
 const upload = multer({
   limits: { fileSize: 10 * 1024 * 1024 },
   storage,
@@ -128,13 +130,25 @@ app.get("/", async (req, res) => {
       // authenticated only
       try {
         jwt.decode(token, process.env.SECRET);
+        const user = await User.findOne({ username: decoded.username });
+        currentUserId = user._id;
       } catch (error) {
         return res.status(401).json({ message: "Invalid token" });
       }
     }
 
     const posts = await Post.find();
-    res.json(posts);
+    const transformedPosts = posts.map((post) => {
+      const postObj = post.toObject();
+      return {
+        ...postObj,
+        likes: postObj.likes || 0,
+        likedBy: postObj.likedBy || [],
+        liked: currentUserId ? postObj.likedBy?.includes(currentUserId) : false,
+      };
+    });
+
+    res.json(transformedPosts);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -198,7 +212,8 @@ app.post("/like", authenticateUser, async (req, res) => {
 
     res.json({
       likes: savedPost.likes,
-      liked: post.likedBy.includes(userId),
+      likedBy: savedPost.likedBy,
+      liked: savedPost.likedBy.includes(userId),
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -207,8 +222,6 @@ app.post("/like", authenticateUser, async (req, res) => {
 
 router.post("/register", async (req, res) => {
   try {
-    console.log("Registration request received:", req.body);
-
     if (!req.body.username || !req.body.password) {
       return res.status(400).json({
         message: "Username and password are required",
@@ -417,16 +430,13 @@ app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
 
-// Add this at the end of your routes, before app.listen
 if (process.env.NODE_ENV === "production") {
-  // Handle options preflight
   app.options("*", cors());
 
   // Serve static files
   app.use(express.static(path.join(__dirname, "../frontend/build")));
 
-  // Handle React routing
   app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "../frontend/build/index.html"));
+    res.sendFile(path.join(__dirname, "../frontend/build", "index.html"));
   });
 }
