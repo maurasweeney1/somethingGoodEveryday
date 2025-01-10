@@ -51,7 +51,6 @@ app.use(
     origin: [
       "http://localhost:3000",
       "https://somethinggoodeveryday.onrender.com",
-      "https://somethinggoodeveryday-api.onrender.com",
     ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
