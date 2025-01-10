@@ -129,7 +129,7 @@ app.get("/", async (req, res) => {
     if (token) {
       // authenticated only
       try {
-        jwt.decode(token, process.env.SECRET);
+        const decoded = jwt.decode(token, process.env.SECRET);
         const user = await User.findOne({ username: decoded.username });
         currentUserId = user._id;
       } catch (error) {

@@ -85,7 +85,7 @@ function App() {
         formData.append("image", newPost.image);
       }
 
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("authToken");
 
       const response = await fetch(`${config.apiUrl}/add-post`, {
         method: "POST",
