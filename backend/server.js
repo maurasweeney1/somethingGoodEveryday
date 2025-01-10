@@ -51,6 +51,7 @@ app.use(
     origin: [
       "http://localhost:3000",
       "https://somethinggoodeveryday.onrender.com",
+      "https://somethinggoodeveryday-backend.onrender.com",
     ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
@@ -58,6 +59,8 @@ app.use(
 );
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ limit: "10mb", extended: true }));
+
+app.options("*", cors());
 
 // MongoDB Connection
 
