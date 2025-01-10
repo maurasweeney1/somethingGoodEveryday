@@ -18,17 +18,25 @@ function RegisterPage() {
         body: JSON.stringify({ username, password }),
       });
 
-      const data = await response.json();
-
       if (!response.ok) {
-        throw new Error(
-          data.message || "Registration failed. Please try again."
-        );
-      }
+        const errorText = await response.text();
+        console.error("Registration error response:", errorText);
 
+        let errorMessage;
+        try {
+          const errorData = JSON.parse(errorText);
+          errorMessage = errorData.message;
+        } catch (e) {
+          errorMessage = errorText || "Registration failed. Please try again.";
+        }
+
+        throw new Error(errorMessage);
+      }
+      const data = await response.json();
       navigate("/signIn");
     } catch (err) {
-      setError(err.message);
+      console.error("Registration error:", err);
+      setError(err.message || "Failed to register. Please try again.");
     }
   };
 

@@ -203,20 +203,27 @@ app.post("/like", authenticateUser, async (req, res) => {
 });
 
 router.post("/register", async (req, res) => {
-  const username = sanitizer(req.body.username);
-  const password = sanitizer(req.body.password);
-
-  let data = {
-    username: username,
-    password: password,
-  };
-
-  const rules = {
-    username: "required|string|min:3|max:20",
-    password: "required|string|min:6",
-  };
-
   try {
+    console.log("Registration request received:", req.body);
+
+    if (!req.body.username || !req.body.password) {
+      return res.status(400).json({
+        message: "Username and password are required",
+      });
+    }
+    const username = sanitizer(req.body.username);
+    const password = sanitizer(req.body.password);
+
+    let data = {
+      username: username,
+      password: password,
+    };
+
+    const rules = {
+      username: "required|string|min:3|max:20",
+      password: "required|string|min:6",
+    };
+
     // Check if username already exists
     const existingUser = await User.findOne({ username: data.username });
 
@@ -227,7 +234,6 @@ router.post("/register", async (req, res) => {
     const validation = new Validator(data, rules);
 
     if (validation.fails()) {
-      // Create a more readable error message
       let errors = [];
       if (validation.errors.get("username")) {
         errors.push(`Username ${validation.errors.first("username")}`);
@@ -254,7 +260,11 @@ router.post("/register", async (req, res) => {
       token: null,
     });
   } catch (error) {
-    return res.status(500).json({ message: "Unknown Error!" });
+    console.error("Registration error:", error);
+    return res.status(500).json({
+      message: "Server error during registration",
+      error: error.message,
+    });
   }
 });
 
