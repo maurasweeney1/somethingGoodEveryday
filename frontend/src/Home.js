@@ -145,8 +145,9 @@ function MainPage({ setPosts, posts, lightMode, updateColorTheme }) {
               name="searchInput"
               placeholder="Search..."
               aria-label="Search"
+              onChange={(e) => setSearchQuery(e.target.value.toLowerCase())}
+              value={searchQuery}
             />
-            <button type="submit">Search</button>
           </form>
         </div>
         <div className="filters">
@@ -204,9 +205,6 @@ function MainPage({ setPosts, posts, lightMode, updateColorTheme }) {
         </div>
 
         {/* light/dark mode */}
-        <span className="color-theme">
-          Color Theme: {lightMode ? "Light Mode " : "Dark Mode "}
-        </span>
         <button
           id="color-theme-button"
           onClick={() => updateColorTheme(!lightMode)}
